@@ -1,0 +1,63 @@
+---
+- name: install ELK Stack
+  host: all
+  become: True
+  vars_files:
+    - variable.yml
+  tasks:
+    - name: install Ubuntu package
+      apt:
+        name: "{{ ubuntu_packages }}"
+        state: present
+      when: ansible_os_family == "Debian"
+	
+    - name: install fedora packages
+      yum:
+        name: "{{ fedora_packages }}"
+        state: present
+      when: ansible_os_family == "Redhat"
+        
+    - name: add Ubuntu GPS key
+      apt_key:
+	      url: https://download.dockers.com/linux/ubuntu/gpg
+	      state: present
+	    when: ansible_os_family == "Debian"
+	   
+     - name: add Ubuntu repository
+       apt_repository:
+	       repo: deb [arch=amd64] https://download.dockers.com/linux/ubuntu xenial stable
+	       state: present
+	     filename: dockers
+	  
+     - name: add Fedora repository
+       yum_repository:
+	       name: docker
+	       description: docker repository
+	       baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+	       state: present
+	       file: docker
+	     when: ansible_os_family == "Redhat"
+	  
+     - name: update Ubuntu cache
+       apt:
+	       update_cache: True
+	     when: ansible_os_family == "Debian"
+	  
+     - name: update Fedora cache
+       yum:
+	       update_cache: True
+	     when: ansible_os_family == "Redhat"
+	  
+     - name: install docker on Ubuntu
+       apt:
+	       name: docker-ce
+	       state: present
+	     when: ansible_os_family == "Debian"
+	  
+     - name: install docker on Fedora
+       yum:
+	       name: docker-ce
+	       state: present
+	     when: ansible_os_family == "Redhat"
+     
+      

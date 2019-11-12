@@ -1,0 +1,54 @@
+---
+- name: install ELK Stack
+  host: all
+  become: True
+  vars_files:
+    - variable.yml
+  tasks:
+     - name: install pip on ubuntu
+       apt:
+         name: "{{ pip_package }}"
+         state: present
+	     when: ansible_os_family == "Redhat"
+
+     - name: install docker-py
+       pip:
+         name: "{{ docker_package }}" 
+         state: present
+     
+     - name: setup Elasticsearch
+       docker: 
+          name: elasticsearch
+          state: started
+          image: docker.elastic.co/elasticsearch/elasticsearch:6.0.0
+          expose:
+            - 9200:9200
+
+     - name: setup Logstash
+       docker: 
+          name: logstash
+          state: started
+          image: docker.elastic.co/logstash/logstash:6.0.0
+          expose: 
+            - 5044:5044
+          link:
+            - elasticsearch
+
+     - name: setup Kibana
+       docker:
+         name: kibana
+         state: started
+         image: docker.elastic.co/kibana/kibana:6.0.0 
+         expose:
+           - 5051:5051
+         link:
+           - elasticsearch 
+
+
+	
+	
+	
+	
+	  
+	  
+	  

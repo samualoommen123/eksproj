@@ -1,0 +1,5 @@
+ansible-playbook -i inventory elk_stack1.yml
+
+ansible-playbook -i inventory elk_stack1.yml
+
+ansible-playbook -i inventory main.yml

@@ -1,0 +1,10 @@
+---
+- name: Setup ELK Stack
+  hosts: all
+  become: True
+  vars_files:
+    - variable.yml
+  tasks:
+    - include: elk_stack1.yml
+    - include: elk_stack2.yml
+    

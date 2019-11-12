@@ -1,0 +1,13 @@
+---
+ubuntu_packages:
+  - apt-transport-https
+  - ca-certificates
+  - software-properties-common
+
+fedora_packages:
+  - lvn2
+  - device-mapper-persistent-data
+  - yum-utils
+
+pip_package: python-pip
+docker_package: docker-py
